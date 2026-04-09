@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    /* --- PALETA DE COLORES (Tu configuración original + AdminHub) --- */
+    --blue: #3C91E6;
+    --light-blue: #CFE8FF;
+    --grey: #eee;
+    --dark-grey: #AAAAAA;
+    --dark: #342E37;
+    --red: #DB504A;
+    --yellow: #FFCE26;
+    --orange: #FD7238;
+    
+    /* Variables de compatibilidad de tu Dashboard previo */
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-background: #f6f6f9;
+
+    /* Espaciado y bordes */
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18);
+}
+
+/* --- MODO OSCURO (Fusionado) --- */
+body.dark {
+    --color-white: #202528;
+    --color-background: #181a1e;
+    --dark: #edeffd;
+    --grey: #2b2e33;
+    --color-info-dark: #a3bdcc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    appearance: none;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--color-background);
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    overflow-x: hidden;
+}
+
+/* --- SIDEBAR (AdminHub Style) --- */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    background: var(--color-white);
+    z-index: 2000;
+    transition: .3s ease;
+    overflow-x: hidden;
+}
+
+#sidebar.hide { width: 60px; }
+
+#sidebar .brand {
+    font-size: 24px;
+    font-weight: 700;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    color: var(--blue);
+    padding: 20px;
+}
+
+#sidebar .side-menu { width: 100%; margin-top: 48px; }
+
+#sidebar .side-menu li {
+    height: 48px;
+    background: transparent;
+    margin-left: 6px;
+    border-radius: 48px 0 0 48px;
+    padding: 4px;
+}
+
+#sidebar .side-menu li.active {
+    background: var(--color-background);
+    position: relative;
+}
+
+#sidebar .side-menu li a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 2rem; /* Recuperamos el espacio de tu menú original */
+    gap: 1rem;
+    font-size: 1rem; /* Un poco más grande como antes */
+    color: var(--color-info-dark);
+    transition: all 300ms ease;
+}
+
+#sidebar .side-menu li a i {
+    font-size: 1.6rem;
+    min-width: 60px; /* Esto asegura que todos los iconos ocupen el mismo espacio */
+    display: flex;
+    justify-content: center;
+}
+
+#sidebar .side-menu li a .bx-motorcycle {
+    font-size: 1.8rem; /* Lo hacemos un pelín más grande para que destaque */
+    font-weight: bold;
+}
+
+#sidebar .side-menu li a.motos-link .material-symbols-outlined {
+    /* Peso 700 es el máximo real en la mayoría de iconos; 900 a veces no cambia más */
+    font-variation-settings: 'wght' 700, 'GRAD' 200; 
+    
+    font-size: 1.8rem; 
+    min-width: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+#sidebar .side-menu li a.logout .material-symbols-outlined {
+    /* grad (grosor): valores de -25 a 200 | wght (peso): de 100 a 700 */
+    font-variation-settings: 'wght' 600, 'GRAD' 50; 
+    
+    /* También asegúrate de que el tamaño coincida con los demás */
+    font-size: 1.8rem; 
+    min-width: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+nav {
+    height: 56px;
+    background: var(--color-white);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* El formulario de búsqueda */
+.search-form-centered {
+    position: absolute; /* Lo sacamos del flujo normal */
+    left: 50%;
+    transform: translateX(-50%); /* Lo centramos respecto al ancho total */
+    max-width: 400px;
+    width: 100%;
+}
+
+.search-form-centered .form-input {
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
+
+/* El espaciador para la derecha (para que el diseño no se rompa) */
+.nav-spacer {
+    width: 300px; /* Ajusta este ancho según lo que midan tus acciones de la izquierda */
+    visibility: hidden;
+}
+
+/* Responsive: Si la pantalla es pequeña, quitamos el absoluto */
+@media screen and (max-width: 768px) {
+    .search-form-centered {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+    }
+    .nav-spacer { display: none; }
+}
+
+#sidebar .side-menu li.active a { 
+    color: var(--blue); 
+    background: var(--light-blue); 
+}/* O el color que prefieras para el activo */
+
+#sidebar .side-menu li a.logout { 
+    color: var(--red); }
+
+/* --- CONTENT AREA (Main Grid) --- */
+#content {
+    position: relative;
+    width: calc(100% - 280px);
+    left: 280px;
+    transition: .3s ease;
+}
+
+#sidebar.hide ~ #content {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+/* --- NAVBAR (Modern SaaS) --- */
+
+nav .bx-menu { cursor: pointer; color: var(--dark); font-size: 24px; }
+
+.date-pill {
+    background: var(--grey);
+    padding: 8px 16px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.date-pill input {
+    background: transparent;
+    border: none;
+    color: var(--blue);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* --- INSIGHTS CARDS (Your Taller Stats) --- */
+main { padding: 36px 24px; }
+
+.box-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 36px;
+}
+
+.box-info li {
+    padding: 24px;
+    background: var(--color-white);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: var(--box-shadow);
+}
+
+.box-info li .bx {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--light-blue);
+    color: var(--blue);
+}
+
+.box-info li .box-icon-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: var(--light-blue); /* El azul clarito de fondo */
+    color: var(--blue); /* El color del icono */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem; /* Tamaño del icono */
+    overflow: hidden; /* Por si la imagen es muy grande */
+}
+
+/* Si eliges usar una imagen real (Opción B) */
+.box-icon-img {
+    width: 90%; /* Ajusta la imagen al contenedor */
+    height: 90%;
+    object-fit: contain; /* Mantiene la proporción sin recortar */
+}
+
+/* --- TABLES & AJAX SECTION --- */
+.table-data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 24px;
+    width: 100%;
+}
+
+.table-data > div {
+    border-radius: 20px;
+    background: var(--color-white);
+    padding: 24px;
+    box-shadow: var(--box-shadow);
+}
+
+.order { flex-grow: 1; flex-basis: 500px; }
+.todo { flex-grow: 1; flex-basis: 300px; }
+
+table { width: 100%; border-collapse: collapse; }
+table th {
+    padding-bottom: 12px;
+    font-size: 13px;
+    text-align: left;
+    border-bottom: 1px solid var(--grey);
+    color: var(--color-info-dark);
+}
+
+table td { padding: 16px 0; border-bottom: 1px solid var(--grey); }
+
+.status {
+    font-size: 10px;
+    padding: 6px 16px;
+    color: var(--color-white);
+    border-radius: 20px;
+    font-weight: 700;
+    background: var(--blue);
+}
+
+/* Form Elements (AJAX Selects) */
+.custom-select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--color-background);
+    color: var(--dark);
+    border: 1px solid var(--grey);
+    margin-top: 10px;
+    font-family: inherit;
+}
+
+/* --- THEME SWITCHER --- */
+.switch-mode {
+    display: block;
+    min-width: 50px;
+    height: 25px;
+    border-radius: 25px;
+    background: var(--grey);
+    cursor: pointer;
+    position: relative;
+}
+
+.switch-mode::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 21px;
+    height: 21px;
+    background: var(--blue);
+    border-radius: 50%;
+    transition: all .3s ease;
+}
+
+#switch-mode:checked + .switch-mode::before {
+    left: calc(100% - 23px);
+}
+
+/* --- RESPONSIVE --- */
+@media screen and (max-width: 768px) {
+    #sidebar { width: 200px; }
+    #content { width: calc(100% - 60px); left: 200px; }
+    .table-data .order, .table-data .todo { flex-basis: 100%; }
+}

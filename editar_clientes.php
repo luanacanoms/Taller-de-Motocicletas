@@ -2,13 +2,20 @@
 include("conexion.php");
 $conexion = dbConnect();
 
-// 1. Recogemos los datos con seguridad
+// 1. Recogemos TODOS los datos
 $idCliente = $_POST['idCliente'];
 $dni = $_POST['dni'];
 $nombre = $_POST['nombre'];
-// ... resto de variables ...
+$apellido1 = $_POST['apellido1'];
+$apellido2 = $_POST['apellido2'];
+$direccion = $_POST['direccion'];
+$cp = $_POST['cp'];
+$poblacion = $_POST['poblacion'];
+$provincia = $_POST['provincia'];
+$telefono = $_POST['telefono'];
+$email = $_POST['email'];
 
-// 2. Usamos Prepared Statements para evitar ataques SQL Injection
+// 2. Usamos Prepared Statements
 $sql = "UPDATE clientes SET DNI=:dni, Nombre=:nombre, Apellido1=:apellido1, 
         Apellido2=:apellido2, Direccion=:direccion, CP=:cp, Poblacion=:poblacion, 
         Provincia=:provincia, Telefono=:telefono, Email=:email 
@@ -26,7 +33,7 @@ try {
         ':poblacion' => $poblacion,
         ':provincia' => $provincia,
         ':telefono' => $telefono,
-        ':email' => $_POST['email'],
+        ':email' => $email, // Usamos la variable $email que definimos arriba
         ':id' => $idCliente
     ]);
 

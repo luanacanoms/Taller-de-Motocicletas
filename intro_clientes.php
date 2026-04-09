@@ -1,20 +1,19 @@
 <?php
 include("conexion.php");
 include("seguridad.php");
-$conexion = dbConnect();
-$pdo = dbConnect();
+$conexion = dbConnect(); // Mantenemos una sola conexión
 
-// 1. Recogemos los datos del texto
-$dni = $_POST['dni'];
-$nombre = $_POST['nombre'];
-$apellido1 = $_POST['apellido1'];
-$apellido2 = $_POST['apellido2'];
-$direccion = $_POST['direccion'];
-$cp = $_POST['cp'];
-$poblacion = $_POST['poblacion'];
-$provincia = $_POST['provincia'];
-$telefono = $_POST['telefono'];
-$email = $_POST['e-mail'];
+// 1. Recogemos los datos con protección (evita errores si falta algún campo)
+$dni = $_POST['dni'] ?? '';
+$nombre = $_POST['nombre'] ?? '';
+$apellido1 = $_POST['apellido1'] ?? '';
+$apellido2 = $_POST['apellido2'] ?? '';
+$direccion = $_POST['direccion'] ?? '';
+$cp = $_POST['cp'] ?? '';
+$poblacion = $_POST['poblacion'] ?? '';
+$provincia = $_POST['provincia'] ?? '';
+$telefono = $_POST['telefono'] ?? '';
+$email = $_POST['email'] ?? ''; // Corregido de 'e-mail' a 'email'
 
 // 2. Procesamos la fotografía (binario)
 $foto = null;
