@@ -6,13 +6,11 @@ include_once("seguridad.php");
 include_once("conexion.php");
 $conexion = dbConnect();
 
-// CORRECCIÓN: Usamos get_result() para MySQLi
-// Nota: Verifica que tu tabla se llame "Motocicletas" (o cámbialo por "Motos" si aplica)
-$sql = "SELECT * FROM Motocicletas ORDER BY Matricula ASC";
+$sql = "SELECT * FROM motocicletas ORDER BY Matricula ASC";
 $consulta = $conexion->prepare($sql);
 $consulta->execute();
 
-$resultado = $consulta->get_result(); // <- AQUÍ ESTÁ LA MAGIA
+$resultado = $consulta->get_result(); 
 $motos = $resultado->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -28,68 +26,28 @@ $motos = $resultado->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
 
-    <section id="sidebar">
-        <a href="menu.php" class="brand" style="text-decoration: none;">
-            <h2 style="margin-left: 20px; color: var(--blue);">
-                <i class='bx bxs-wrench'></i> MotoTaller
-            </h2>
-        </a>
-        <ul class="side-menu top">
-            <li>
-                <a href="menu.php">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="listar_clientes.php">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Clientes</span>
-                </a>
-            </li>
-            <li class="active">
-                <a href="listar_motos.php" class="motos-link">
-                    <i class="material-symbols-outlined">two_wheeler</i>
-                    <span class="text">Motos</span>
-                </a>
-            </li>
-            <li>
-                <a href="listar_facturas.php">
-                    <i class='bx bxs-receipt'></i>
-                    <span class="text">Facturas</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu bottom-menu">
-            <li>
-                <a href="logout.php" class="logout">
-                    <i class="material-symbols-outlined">logout</i>
-                    <span class="text">Salir</span>
-                </a>
-            </li>
-        </ul>
-    </section>
+    <?php include_once("sidebar.php"); ?>
 
     <section id="content">
-        <nav>
-            <div class="nav-actions"></div>
-            <form action="#" class="search-form-centered">
-                <div class="form-input">
-                    <input type="search" placeholder="Buscar matrícula...">
-                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+         
+         <nav style="position: sticky; top: 0; z-index: 1000; background: #ffffff; display: flex; align-items: center; justify-content: center; padding: 15px 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); width: 100%;">
+            <form action="#" style="width: 100%; max-width: 500px;">
+                <div class="saas-search-container" style="display: flex; width: 100%; align-items: center;">
+                    <i class='bx bx-search'></i>
+                    <input type="search" placeholder="Buscar matrícula o modelo..." style="width: 100%; border: none; outline: none; background: transparent; padding-left: 10px; font-family: inherit;">
                 </div>
             </form>
-            <div class="nav-spacer"></div>
         </nav>
 
         <main>
             <div class="table-data">
                 <div class="order">
-                    <div class="head">
-                        <h3>Directorio de Motocicletas</h3>
-                        <a href="intro_moto.php" style="background: var(--blue); color: white; padding: 8px 16px; border-radius: 20px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;">
+                    <div class="head" style="display: flex; align-items: center; width: 100%; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">Directorio de Motocicletas</h3>
+                        
+                        <button onclick="abrirModal('modalMoto')" style="margin-left: auto; background: var(--blue); color: white; padding: 9px 16px; border-radius: 8px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; border: none; cursor: pointer; font-family: inherit; font-weight: 500; transition: background 0.3s;">
                             <i class='bx bx-plus'></i> Añadir Moto
-                        </a>
+                        </button>
                     </div>
                     
                     <table>
@@ -114,13 +72,14 @@ $motos = $resultado->fetch_all(MYSQLI_ASSOC);
                                     <span style="font-size: 0.8rem; color: var(--dark-grey);"><?= htmlspecialchars($moto['Modelo'] ?? '') ?></span>
                                 </td>
                                 <td>
-                                    <p><?= htmlspecialchars($moto['Anio'] ?? $moto['Año'] ?? 'N/A') ?></p>
+                                    <p><?= htmlspecialchars($moto['Anio'] ?? $moto['Año'] ?? $moto['Anyo'] ?? 'N/A') ?></p>
                                     <span style="font-size: 0.8rem; color: var(--dark-grey);"><?= htmlspecialchars($moto['Color'] ?? 'N/A') ?></span>
                                 </td>
                                 <td>
-                                    <a href="editar_moto.php?id=<?= urlencode($moto['Matricula'] ?? '') ?>" style="color: var(--blue); font-size: 1.2rem; margin-right: 10px;">
+                                    <button onclick="editarMoto('<?= $moto['Matricula'] ?>', '<?= addslashes($moto['Marca']) ?>', '<?= addslashes($moto['Modelo']) ?>', '<?= $moto['Anyo'] ?? $moto['Año'] ?? $moto['Anio'] ?? '' ?>', '<?= addslashes($moto['Color']) ?>')" style="background: none; border: none; color: var(--blue); font-size: 1.2rem; margin-right: 10px; cursor: pointer;">
                                         <i class='bx bxs-edit'></i>
-                                    </a>
+                                    </button>
+
                                     <a href="borrar_moto.php?id=<?= urlencode($moto['Matricula'] ?? '') ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar esta motocicleta del registro?');" style="color: var(--red); font-size: 1.2rem;">
                                         <i class='bx bxs-trash'></i>
                                     </a>
@@ -133,6 +92,84 @@ $motos = $resultado->fetch_all(MYSQLI_ASSOC);
             </div>
         </main>
     </section>
+
+    <div class="modal-overlay" id="modalMoto">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Registrar Nueva Moto</h3>
+                <button class="modal-close" onclick="cerrarModal('modalMoto')">&times;</button>
+            </div>
+            <form action="procesar_moto.php" method="POST">
+                <div class="form-group">
+                    <label>Matrícula</label>
+                    <input type="text" name="matricula" placeholder="Ej: 1234-ABC" required>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Marca</label>
+                        <input type="text" name="marca" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Modelo</label>
+                        <input type="text" name="modelo" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Año</label>
+                        <input type="number" name="anyo" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Color</label>
+                        <input type="text" name="color" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>ID Cliente (Propietario)</label>
+                    <input type="number" name="id_cliente" placeholder="ID del Cliente" required>
+                </div>
+                <button type="submit" class="btn-modal">Guardar Motocicleta</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalEditarMoto">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Modificar Motocicleta</h3>
+                <button class="modal-close" onclick="cerrarModal('modalEditarMoto')">&times;</button>
+            </div>
+            <form action="editar_moto.php" method="POST">
+                <div class="form-group">
+                    <label>Matrícula (No editable)</label>
+                    <input type="text" id="edit_moto_matricula" name="matricula" readonly style="background: #e5e7eb; color: var(--dark-grey);">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Marca</label>
+                        <input type="text" id="edit_marca" name="marca" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Modelo</label>
+                        <input type="text" id="edit_modelo" name="modelo" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Año</label>
+                        <input type="number" id="edit_anyo" name="anyo" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Color</label>
+                        <input type="text" id="edit_color" name="color" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-modal">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 
 </body>
 </html>

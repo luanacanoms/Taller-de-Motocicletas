@@ -25,64 +25,26 @@ $clientes = $resultado->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
 
-    <section id="sidebar">
-        <a href="menu.php" class="brand" style="text-decoration: none;">
-            <h2 style="margin-left: 20px; color: var(--blue);">
-                <i class='bx bxs-wrench'></i> MotoTaller
-            </h2>
-        </a>
-        <ul class="side-menu top">
-            <li>
-                <a href="menu.php">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li class="active">
-                <a href="listar_clientes.php">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Clientes</span>
-                </a>
-            </li>
-            <li>
-                <a href="listar_motos.php" class="motos-link">
-                    <i class="material-symbols-outlined">two_wheeler</i>
-                    <span class="text">Motos</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu bottom-menu">
-            <li>
-                <a href="logout.php" class="logout">
-                    <i class="material-symbols-outlined">logout</i>
-                    <span class="text">Salir</span>
-                </a>
-            </li>
-        </ul>
-    </section>
+    <?php include_once("sidebar.php"); ?>
 
     <section id="content">
-        <nav>
-            <div class="nav-actions">
-                </div>
-            
-            <form action="#" class="search-form-centered">
-                <div class="form-input">
-                    <input type="search" placeholder="Buscar cliente...">
-                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+         
+         <nav style="position: sticky; top: 0; z-index: 1000; background: #ffffff; display: flex; align-items: center; justify-content: center; padding: 15px 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); width: 100%;">
+            <form action="#" style="width: 100%; max-width: 500px;">
+                <div class="saas-search-container" style="display: flex; width: 100%; align-items: center;">
+                    <i class='bx bx-search'></i>
+                    <input type="search" placeholder="Buscar cliente..." style="width: 100%; border: none; outline: none; background: transparent; padding-left: 10px; font-family: inherit;">
                 </div>
             </form>
-
-            <div class="nav-spacer"></div>
         </nav>
 
         <main>
             <div class="table-data">
                 <div class="order">
-                    <div class="head">
-                        <h3>Directorio de Clientes</h3>
-                        <i class='bx bx-filter'></i>
+                    <div class="head" style="display: flex; align-items: center; width: 100%; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">Directorio de Clientes</h3>
                     </div>
+                    
                     <table>
                         <thead>
                             <tr>
@@ -101,7 +63,7 @@ $clientes = $resultado->fetch_all(MYSQLI_ASSOC);
                                 </td>
                                 <td><?= htmlspecialchars($fila['DNI'] ?? $fila['dni']) ?></td>
                                 <td>
-                                    <p><?= htmlspecialchars(($fila['Nombre'] ?? $fila['nombre']) . ' ' . ($fila['Apellido1'] ?? '') . ' ' . ($fila['Apellido2'] ?? '')) ?></p>
+                                    <p style="font-weight: 600;"><?= htmlspecialchars(($fila['Nombre'] ?? $fila['nombre']) . ' ' . ($fila['Apellido1'] ?? '') . ' ' . ($fila['Apellido2'] ?? '')) ?></p>
                                 </td>
                                 <td><?= htmlspecialchars($fila['Poblacion'] ?? '') ?></td>
                                 <td>
@@ -116,6 +78,8 @@ $clientes = $resultado->fetch_all(MYSQLI_ASSOC);
             </div>
         </main>
     </section>
+
+    <script src="script.js"></script>
 
 </body>
 </html>

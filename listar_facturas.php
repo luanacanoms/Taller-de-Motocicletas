@@ -6,15 +6,13 @@ include_once("seguridad.php");
 include_once("conexion.php");
 $conexion = dbConnect();
 
-// CORRECCIÓN 1: Aseguramos el nombre de la tabla en plural (Facturas)
 $sql = "SELECT f.*, m.Marca, m.Modelo 
-        FROM Facturas f
-        INNER JOIN Motocicletas m ON f.Matricula = m.Matricula
+        FROM facturas f
+        INNER JOIN motocicletas m ON f.Matricula = m.Matricula
         ORDER BY f.Fecha_Emision DESC";
 $consulta = $conexion->prepare($sql);
 $consulta->execute();
 
-// CORRECCIÓN 2: Forma correcta de extraer datos en MySQLi
 $resultado = $consulta->get_result();
 $facturas = $resultado->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -27,73 +25,31 @@ $facturas = $resultado->fetch_all(MYSQLI_ASSOC);
     
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <section id="sidebar">
-        <a href="menu.php" class="brand" style="text-decoration: none;">
-            <h2 style="margin-left: 20px; color: var(--blue);">
-                <i class='bx bxs-wrench'></i> MotoTaller
-            </h2>
-        </a>
-        <ul class="side-menu top">
-            <li>
-                <a href="menu.php">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="listar_clientes.php">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Clientes</span>
-                </a>
-            </li>
-            <li>
-                <a href="listar_motos.php" class="motos-link">
-                    <i class="material-symbols-outlined">two_wheeler</i>
-                    <span class="text">Motos</span>
-                </a>
-            </li>
-            <li class="active">
-                <a href="listar_facturas.php">
-                    <i class='bx bxs-receipt'></i>
-                    <span class="text">Facturas</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu bottom-menu">
-            <li>
-                <a href="logout.php" class="logout">
-                    <i class="material-symbols-outlined">logout</i>
-                    <span class="text">Salir</span>
-                </a>
-            </li>
-        </ul>
-    </section>
+    <?php include_once("sidebar.php"); ?>
 
     <section id="content">
-        <nav>
-            <div class="nav-actions"></div>
-            <form action="#" class="search-form-centered">
-                <div class="form-input">
-                    <input type="search" placeholder="Buscar nº factura...">
-                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+        <nav style="position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; background: #ffffff; padding: 15px 24px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);">
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 1rem; margin-left: 10px;"></div>
+            <form action="#" style="position: absolute; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px;">
+                <div class="saas-search-container">
+                    <i class='bx bx-search'></i>
+                    <input type="search" placeholder="Buscar en facturas...">
                 </div>
             </form>
-            <div class="nav-spacer"></div>
         </nav>
 
         <main>
             <div class="table-data">
                 <div class="order">
-                    <div class="head">
-                        <h3>Gestión General de Facturas</h3>
-                        <a href="intro_factura.php" style="background: var(--blue); color: white; padding: 8px 16px; border-radius: 20px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;">
+                    <div class="head" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">Gestión General de Facturas</h3>
+                        <button onclick="abrirModal('modalFactura')" style="background: var(--blue); color: white; padding: 9px 16px; border-radius: 8px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; border: none; cursor: pointer; font-family: inherit; font-weight: 500; transition: background 0.3s;">
                             <i class='bx bx-plus'></i> Crear Factura
-                        </a>
+                        </button>
                     </div>
                     
                     <table>
@@ -117,18 +73,24 @@ $facturas = $resultado->fetch_all(MYSQLI_ASSOC);
                                 </td>
                                 <td><?= htmlspecialchars($fac['Fecha_Emision'] ?? '') ?></td>
                                 <td><b style="color: var(--blue); font-size: 1.1rem;"><?= htmlspecialchars($fac['Total'] ?? '0.00') ?> €</b></td>
+                                
                                 <td>
-                                    <?php if(!empty($fac['Fecha_Pago'])): ?>
-                                        <span class="status completed" style="background: var(--color-success); padding: 4px 10px; border-radius: 20px; color: white; font-size: 0.75rem;">Pagada</span>
+                                    <?php if(!empty($fac['Fecha_Pago']) && $fac['Fecha_Pago'] != '0000-00-00'): ?>
+                                        <div style="color: #10b981; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                                            <i class='bx bx-check-circle' style="font-size: 1.1rem;"></i> Pagada
+                                        </div>
                                     <?php else: ?>
-                                        <span class="status pending" style="background: var(--orange); padding: 4px 10px; border-radius: 20px; color: white; font-size: 0.75rem;">Pendiente</span>
+                                        <div style="color: #f59e0b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                                            <i class='bx bx-time-five' style="font-size: 1.1rem;"></i> Pendiente
+                                        </div>
                                     <?php endif; ?>
                                 </td>
+
                                 <td>
-                                    <a href="editar_factura.php?id=<?= urlencode($fac['Numero_Factura']) ?>" style="color: var(--blue); font-size: 1.2rem; margin-right: 10px;">
+                                    <button onclick="editarFactura('<?= $fac['Numero_Factura'] ?>', '<?= $fac['Matricula'] ?>', '<?= $fac['Mano_Obra'] ?>', '<?= $fac['Precio_Hora'] ?>', '<?= (!empty($fac['Fecha_Pago']) && $fac['Fecha_Pago'] != '0000-00-00') ? 'pagada' : 'pendiente' ?>')" style="background: none; border: none; color: var(--blue); font-size: 1.2rem; margin-right: 10px; cursor: pointer;">
                                         <i class='bx bxs-edit'></i>
-                                    </a>
-                                    <a href="borrar_factura.php?id=<?= urlencode($fac['Numero_Factura']) ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar esta factura y todas sus líneas de repuestos?');" style="color: var(--red); font-size: 1.2rem;">
+                                    </button>
+                                    <a href="borrar_factura.php?id=<?= urlencode($fac['Numero_Factura']) ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar esta factura?');" style="color: var(--red); font-size: 1.2rem;">
                                         <i class='bx bxs-trash'></i>
                                     </a>
                                 </td>
@@ -141,5 +103,12 @@ $facturas = $resultado->fetch_all(MYSQLI_ASSOC);
         </main>
     </section>
 
-</body>
-</html>
+    <div class="modal-overlay" id="modalFactura">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Generar Nueva Factura</h3>
+                <button class="modal-close" onclick="cerrarModal('modalFactura')">&times;</button>
+            </div>
+            <form action="procesar_factura.php" method="POST">
+                <div class="form-group">
+                    <label>Número

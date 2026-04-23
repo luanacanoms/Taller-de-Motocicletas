@@ -1,0 +1,446 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    /* --- PALETA DE COLORES (Tu configuración original + AdminHub) --- */
+    --blue: #3C91E6;
+    --light-blue: #CFE8FF;
+    --grey: #eee;
+    --dark-grey: #AAAAAA;
+    --dark: #342E37;
+    --red: #DB504A;
+    --yellow: #FFCE26;
+    --orange: #FD7238;
+    
+    /* Variables de compatibilidad de tu Dashboard previo */
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-background: #f6f6f9;
+
+    /* Espaciado y bordes */
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18);
+}
+
+/* --- MODO OSCURO (Fusionado) --- */
+body.dark {
+    --color-white: #202528;
+    --color-background: #181a1e;
+    --dark: #edeffd;
+    --grey: #2b2e33;
+    --color-info-dark: #a3bdcc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    appearance: none;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--color-background);
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    overflow-x: hidden;
+}
+
+
+nav {
+    height: 56px;
+    background: var(--color-white);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* El formulario de búsqueda */
+.search-form-centered {
+    position: absolute; /* Lo sacamos del flujo normal */
+    left: 50%;
+    transform: translateX(-50%); /* Lo centramos respecto al ancho total */
+    max-width: 400px;
+    width: 100%;
+}
+
+.search-form-centered .form-input {
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
+
+/* El espaciador para la derecha (para que el diseño no se rompa) */
+.nav-spacer {
+    width: 300px; /* Ajusta este ancho según lo que midan tus acciones de la izquierda */
+    visibility: hidden;
+}
+
+/* Responsive: Si la pantalla es pequeña, quitamos el absoluto */
+@media screen and (max-width: 768px) {
+    .search-form-centered {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+    }
+    .nav-spacer { display: none; }
+}
+
+
+/* --- CONTENT AREA (Main Grid) --- */
+#content {
+    position: relative;
+    width: calc(100% - 280px);
+    left: 280px;
+    transition: .3s ease;
+}
+
+
+/* --- NAVBAR (Modern SaaS) --- */
+
+nav .bx-menu { cursor: pointer; color: var(--dark); font-size: 24px; }
+
+.date-pill {
+    background: var(--grey);
+    padding: 8px 16px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.date-pill input {
+    background: transparent;
+    border: none;
+    color: var(--blue);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* --- INSIGHTS CARDS (Your Taller Stats) --- */
+main { padding: 36px 24px; }
+
+.box-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 36px;
+}
+
+.box-info li {
+    padding: 24px;
+    background: var(--color-white);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: var(--box-shadow);
+}
+
+.box-info li .bx {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--light-blue);
+    color: var(--blue);
+}
+
+.box-info li .box-icon-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: var(--light-blue); /* El azul clarito de fondo */
+    color: var(--blue); /* El color del icono */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem; /* Tamaño del icono */
+    overflow: hidden; /* Por si la imagen es muy grande */
+}
+
+/* Si eliges usar una imagen real (Opción B) */
+.box-icon-img {
+    width: 90%; /* Ajusta la imagen al contenedor */
+    height: 90%;
+    object-fit: contain; /* Mantiene la proporción sin recortar */
+}
+
+/* --- TABLES & AJAX SECTION --- */
+.table-data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 24px;
+    width: 100%;
+}
+
+.table-data > div {
+    border-radius: 20px;
+    background: var(--color-white);
+    padding: 24px;
+    box-shadow: var(--box-shadow);
+}
+
+.order { flex-grow: 1; flex-basis: 500px; }
+.todo { flex-grow: 1; flex-basis: 300px; }
+
+table { width: 100%; border-collapse: collapse; }
+table th {
+    padding-bottom: 12px;
+    font-size: 13px;
+    text-align: left;
+    border-bottom: 1px solid var(--grey);
+    color: var(--color-info-dark);
+}
+
+table td { padding: 16px 0; border-bottom: 1px solid var(--grey); }
+
+.status {
+    font-size: 10px;
+    padding: 6px 16px;
+    color: var(--color-white);
+    border-radius: 20px;
+    font-weight: 700;
+    background: var(--blue);
+}
+
+/* Form Elements (AJAX Selects) */
+.custom-select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--color-background);
+    color: var(--dark);
+    border: 1px solid var(--grey);
+    margin-top: 10px;
+    font-family: inherit;
+}
+
+/* --- THEME SWITCHER --- */
+.switch-mode {
+    display: block;
+    min-width: 50px;
+    height: 25px;
+    border-radius: 25px;
+    background: var(--grey);
+    cursor: pointer;
+    position: relative;
+}
+
+.switch-mode::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 21px;
+    height: 21px;
+    background: var(--blue);
+    border-radius: 50%;
+    transition: all .3s ease;
+}
+
+#switch-mode:checked + .switch-mode::before {
+    left: calc(100% - 23px);
+}
+
+/* --- RESPONSIVE --- */
+@media screen and (max-width: 768px) {
+    #sidebar { width: 200px; }
+    #content { width: calc(100% - 60px); left: 200px; }
+    .table-data .order, .table-data .todo { flex-basis: 100%; }
+}
+
+/* --- ESTILO SAAS MODERNO PARA EL BUSCADOR (Claro) --- */
+.saas-search-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 42px; /* Altura estilizada y profesional */
+    background: #dde3e9; /* Un gris blanquecino muy sutil para el fondo */
+    border: 1px solid #e5e7eb; /* Borde gris claro */
+    border-radius: 8px; /* Bordes redondeados pero no circulares */
+    padding: 0 16px;
+    transition: all 0.2s ease;
+}
+
+/* Efecto visual al hacer clic dentro del buscador */
+.saas-search-container:focus-within {
+    background: #ffffff; /* Se vuelve blanco puro al escribir */
+    border-color: var(--blue); /* El borde se pinta del azul de tu tema */
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15); /* Anillo de resplandor azul suave */
+}
+
+.saas-search-container i {
+    color: #9ca3af; /* Icono en gris medio */
+    font-size: 1.25rem;
+    margin-right: 12px; /* Espacio entre la lupa y el texto */
+}
+
+.saas-search-container input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    color: var(--dark);
+    font-family: 'Poppins', sans-serif;
+}
+
+.saas-search-container input::placeholder {
+    color: #9ca3af;
+}
+
+/* --- MODALES SAAS MODERNOS --- */
+.modal-overlay {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(17, 24, 39, 0.6); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(4px); /* Efecto cristal */
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-box {
+    background: var(--color-white);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-box {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--grey);
+    padding-bottom: 15px;
+}
+
+.modal-header h3 { color: var(--dark); font-size: 1.2rem; }
+
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-info-dark);
+}
+
+.modal-close:hover { color: var(--color-danger); }
+
+/* Estilo de los formularios dentro del modal */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--color-info-dark); font-weight: 500;}
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--blue);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.btn-modal {
+    width: 100%;
+    padding: 12px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.btn-modal:hover { background: #2a7ac4; }
+
+/* Estilos para el Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-size: 0.85rem; color: #666; margin-bottom: 0.4rem; }
+.form-group input { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+
+.form-row { display: flex; gap: 1rem; }
+.form-row .form-group { flex: 1; }
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-primary { background: #2596be; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.btn-secondary { background: #eee; color: #666; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; }
