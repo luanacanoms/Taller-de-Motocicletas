@@ -3,6 +3,7 @@ include("seguridad.php");
 include("conexion.php");
 $conexion = dbConnect();
 
+// Cargamos TODAS las matrículas al entrar a la página
 $sql = "SELECT DISTINCT Matricula FROM motocicletas ORDER BY Matricula";
 $resultado = $conexion->query($sql);
 ?>
@@ -21,6 +22,7 @@ $resultado = $conexion->query($sql);
         label { display: block; font-weight: 600; color: #374151; margin-bottom: 0.5rem; }
         select { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 8px; font-family: 'Poppins'; background: #F9FAFB; }
         
+        /* Estilos de la tabla dinámica */
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th { padding: 1rem; border-bottom: 2px solid #E5E7EB; color: #6B7280; text-align: left; }
         td { padding: 1rem; border-bottom: 1px solid #E5E7EB; color: #111827; }
@@ -57,21 +59,23 @@ $resultado = $conexion->query($sql);
     </div>
 
     <script>
-        
+        // EVENTO 1: Cuando el usuario cambia la matrícula
         document.getElementById('select-matricula').addEventListener('change', function() {
             let matriculaSeleccionada = this.value;
             let selectFactura = document.getElementById('select-factura');
             let divDetalle = document.getElementById('resultado-detalle');
             
+            // Limpiamos resultados anteriores
             divDetalle.innerHTML = '';
             selectFactura.innerHTML = '<option value="">Cargando facturas...</option>';
             selectFactura.disabled = true;
 
             if(matriculaSeleccionada !== "") {
-                fetch('ajax_get_facturas.php?matricula=' + matriculaSeleccionada)
+                // Llamada AJAX al servidor (Apuntando a la carpeta AJAX)
+                fetch('../AJAX/ajax_get_facturas.php?matricula=' + matriculaSeleccionada)
                 .then(response => response.text())
                 .then(data => {
-                    selectFactura.innerHTML = data; // Rellenamos el desplegable 2
+                    selectFactura.innerHTML = data; 
                     selectFactura.disabled = false;
                 });
             } else {
@@ -79,28 +83,23 @@ $resultado = $conexion->query($sql);
             }
         });
 
+        // EVENTO 2: Cuando el usuario cambia la factura
         document.getElementById('select-factura').addEventListener('change', function() {
             let facturaSeleccionada = this.value;
             let divDetalle = document.getElementById('resultado-detalle');
 
             if(facturaSeleccionada !== "") {
                 divDetalle.innerHTML = '<p>Buscando detalles...</p>';
-                // Llamada AJAX al servidor
-                fetch('ajax_get_detalle.php?factura=' + facturaSeleccionada)
+                // Llamada AJAX al servidor (Apuntando a la carpeta AJAX)
+                fetch('../AJAX/ajax_get_detalle.php?factura=' + facturaSeleccionada)
                 .then(response => response.text())
                 .then(data => {
-                    divDetalle.innerHTML = data; // Inyectamos la tabla
+                    divDetalle.innerHTML = data; 
                 });
             } else {
                 divDetalle.innerHTML = '';
             }
         });
-
-        // Dentro del Evento 1:
-fetch('../AJAX/ajax_get_facturas.php?matricula=' + matriculaSeleccionada)
-
-// Dentro del Evento 2:
-fetch('../AJAX/ajax_get_detalle.php?factura=' + facturaSeleccionada)
     </script>
 </body>
 </html>

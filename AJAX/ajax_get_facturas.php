@@ -1,5 +1,5 @@
 <?php
-require_once("conexion.php");
+require_once("../PHP/conexion.php");
 $conexion = dbConnect();
 
 if(isset($_GET['matricula'])) {
